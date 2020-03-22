@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import moment from 'moment';
 
-export default function PodcastListItem(props) {
+export default function EpisodeListItem(props) {
 
         return(
         <TouchableOpacity
-        activeOpacity={0.7}
-        onPress={ () => { props.navigation.navigate('PodcastDetails', { podcast: props.podcast }) } }
-        style={styles.container}>
-        <Image style={styles.podcastImage} resizeMode="cover" source={{ uri: props.podcast.image }} />
+        onPress={() => { props.navigation.navigate('EpisodeDetails', { podcast: props.podcast, episode: props.episode }) }}
+        style={styles.container}
+        activeOpacity={0.7}>
         <View style={styles.podcastInfo}>
-            <Text style={styles.podcastName}>{ props.podcast.name }</Text>
-            <Text style={styles.podcastAuthor}>{ props.podcast.author }</Text>
-            <Text style={styles.podcastDescription}>{ props.podcast.description }</Text>
+            <Text style={styles.podcastDate}>{ moment(props.episode.pub_date).format('DD/MM/YYYY HH:mm') }</Text>
+            <Text style={styles.podcastName}>{ props.episode.title }</Text>
+            <Text style={styles.podcastDescription}>{ props.episode.description }</Text>
         </View>
         </TouchableOpacity>
         );
@@ -22,11 +23,11 @@ export default function PodcastListItem(props) {
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 7,
+        marginVertical: 10,
         marginHorizontal: 10,
         backgroundColor: '#fff',
         borderRadius: 5,
-        elevation: 5,
+        elevation: 3,
         shadowOffset:{  width: 3,  height: 3,  },
         shadowColor: 'black',
         shadowOpacity: 0.4,
@@ -41,11 +42,10 @@ const styles = StyleSheet.create({
     podcastInfo: {
         margin: 10,
         flex: 1,
-        height: 110
     },
     podcastName: {
         flexWrap: "wrap",
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'purple'
     },
@@ -55,7 +55,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5
     },
+    podcastDate: {
+        fontSize: 12,
+        fontWeight: 'bold'
+    },
     podcastAuthor: {
         marginTop: 5
-    }
+    },
+    controls: {
+        marginTop: 10
+    },
 })

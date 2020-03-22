@@ -39,7 +39,7 @@ export default function App() {
             },
         })}
         tabBarOptions={{
-            activeTintColor: '#1A87F7',
+            activeTintColor: 'purple',
             inactiveTintColor: 'gray',
             labelStyle: {
                 marginTop: -7,
