@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import EpisodeListItem from '../../components/EpisodeListItem';
 
 import api from '../../services/api';
+import Global from '../../config/Global';
 
 
 
@@ -41,7 +42,7 @@ function PodcastDetails(props){
         
         const podcast = props.route.params.podcast;
         setPodcast(podcast);
-        props.navigation.setOptions({ title: podcast.name });
+        props.navigation.setOptions({ title: podcast.name.substring(0, 25) });
         loadEpisodes(podcast);
         
     }, []);
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        marginBottom: Global.playerHeight,
     },
     podcastImage: {
         height: 220,

@@ -4,6 +4,7 @@ import PodcastListItem from '../../components/PodcastListItem';
 import api from '../../services/api';
 
 import NotFoundIMage from '../../../assets/audience.svg';
+import Global from '../../config/Global';
 
 function Main({ navigation }){
     
@@ -67,6 +68,7 @@ function Main({ navigation }){
         },
         gridView: {
             flex: 1,
+            marginBottom: Global.playerHeight,
         },
         notFoundContent: {
             justifyContent: 'center',

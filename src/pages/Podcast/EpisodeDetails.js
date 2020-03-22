@@ -1,101 +1,50 @@
-import React, { useEffect } from 'react';
-import { StatusBar, SafeAreaView, StyleSheet, Platform, Image, Text, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react';
+import { StatusBar, SafeAreaView, StyleSheet, Platform, Image, Text, TouchableOpacity, ActivityIndicator, AsyncStorage } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Audio } from 'expo-av';
 
-function EpisodeDetails(props){
+
+export default class EpisodeDetails extends Component {
     
-    
-    const [podcast, setPodcast] = React.useState({});
-    const [episode, setEpisode] = React.useState([]);
-    const [playing, setPlaying] = React.useState(false);
-    const [buffering, setBuffering] = React.useState(false);
-    const [playbackInstance, setPlaybackInstance] = React.useState({});
-    
-    const soundObject = new Audio.Sound();
-    
-    
-    const _configPlayer = async (episodeData) => {
-        await Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-            playsInSilentModeIOS: true,
-            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-            shouldDuckAndroid: true,
-            staysActiveInBackground: true,
-            playThroughEarpieceAndroid: true
-        })
-        setPlaybackInstance(new Audio.Sound());
-        _startSoundBuffer(episodeData);
+    state = { episode: {}, podcast: {} };
+
+
+    componentDidMount(){
+        
+        const podcast = this.props.route.params.podcast;
+        const episode = this.props.route.params.episode;
+
+        this.setState({ episode, podcast })
+        
+        this.props.navigation.setOptions({ title: 'Episódio' });
+        
+    }
+
+
+    _playSound = () => {
+
+        AsyncStorage.setItem('currentAudio', this.state.episode.audio_url);
+        AsyncStorage.setItem('currentEpisodeTitle', this.state.episode.title);
         
     }
     
-    useEffect(() => {
-        
-        const podcast = props.route.params.podcast;
-        const episode = props.route.params.episode;
-        setPodcast(podcast);
-        setEpisode(episode);
-        props.navigation.setOptions({ title: 'Episódio' });
-        
-        _configPlayer(episode);
-        
-        
-    }, []);
-    
-    const _startSoundBuffer = async (episodeData) => {
-        try {
+    render(){
+        return (
+            <SafeAreaView style={ styles.container }>
+            <ScrollView>
+            <StatusBar backgroundColor="purple" barStyle="light-content" />
+            <Image style={styles.podcastImage} source={{ uri: this.state.episode.image ? this.state.episode.image : this.state.podcast.image }}/>
+            <TouchableOpacity style={styles.controlForm} activeOpacity={0.6} onPress={() => { this._playSound() }}>
+            <Icon style={styles.controlIcon} name="play" size={20} />
+            </TouchableOpacity>
+            <Text style={styles.podcastDescription}>{ this.state.episode.description }</Text>
             
-            await soundObject.setOnPlaybackStatusUpdate(_onPlaybackStatusUpdate);
-            await soundObject.loadAsync({ uri: episodeData.audio_url });
-            // Your sound is playing!
-            alert('sound loaded')
-        } catch (error) {
-            console.log('error', error)
-            alert('Erro ao carregar o episódio')
-            // An error occurred!
+            </ScrollView>
+            
+            </SafeAreaView>
+            );
         }
-    }
-    
-    const _onPlaybackStatusUpdate = (status) => {
-        setBuffering(status.isBuffering);
-    }
-    
-    const _playPauseSound = async () => {
-        
-        try {
-            
-            if(playing){
-                await soundObject.pauseAsync();
-            }else{
-                await soundObject.playAsync();
-            }
-            
-            setPlaying(!playing);
-            
-        } catch (error) {
-            console.log(error)
-            alert('Erro ao executar')
-        }
-    }
-    
-    return (
-        <SafeAreaView style={ styles.container }>
-        <ScrollView>
-        <StatusBar backgroundColor="purple" barStyle="light-content" />
-        <Image style={styles.podcastImage} source={{ uri: episode.image ? episode.image : podcast.image }}/>
-        <TouchableOpacity style={styles.controlForm} activeOpacity={0.6} onPress={_playPauseSound}>
-        {buffering && <Icon style={styles.controlIcon} name="stop" size={30} />}
-        {!playing && !buffering && <Icon style={styles.controlIcon} name="play" size={30} />}
-        {playing && !buffering && <Icon style={styles.controlIcon} name="pause" size={30} />}
-        </TouchableOpacity>
-        <Text style={styles.podcastDescription}>{ episode.description }</Text>
-        
-        </ScrollView>
-        
-        </SafeAreaView>
-        );
         
     }
     
@@ -119,10 +68,10 @@ function EpisodeDetails(props){
             fontWeight: 'bold',
         },
         controlForm: {
-            marginTop: -40,
+            marginTop: -30,
             backgroundColor: 'purple',
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             justifyContent: 'center',
             alignItems: 'center',
             elevation: 8,
@@ -134,8 +83,9 @@ function EpisodeDetails(props){
         },
         controlIcon: {
             color: 'white',
-            marginLeft: 7
+            marginLeft: 5
         },
+        controlIconPause: {
+            color: 'white'
+        }
     })
-    
-    export default EpisodeDetails;
