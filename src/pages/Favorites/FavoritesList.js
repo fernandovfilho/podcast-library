@@ -36,7 +36,7 @@ function Favorites({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="lightgray" barStyle="light-content" />
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -59,8 +59,8 @@ function Favorites({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 35 : 10,
-    backgroundColor: "#2A2E43",
+    paddingTop: Platform.OS === "android" ? 0 : 0,
+    backgroundColor: "#fff",
   },
 });
 

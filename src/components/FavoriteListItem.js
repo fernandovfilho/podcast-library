@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 7,
     marginRight: 10,
-    backgroundColor: "#454F63",
+    backgroundColor: "#FFF",
     borderRadius: 12,
     flexDirection: "row",
     marginLeft: Platform.OS === "ios" ? 50 : 10,
@@ -51,19 +51,20 @@ const styles = StyleSheet.create({
   },
   podcastName: {
     flexWrap: "wrap",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#FFF",
+    color: "#333",
   },
   podcastDescription: {
     flexWrap: "wrap",
-    color: "#959DAD",
+    color: "#666",
     flexShrink: 1,
     fontSize: 12,
     marginTop: 5,
   },
   podcastAuthor: {
     marginTop: 5,
-    color: "#FFF",
+    color: "#333",
+    fontWeight: "bold",
   },
 });

@@ -8,6 +8,8 @@ import {
   ScrollView,
   View,
   Text,
+  FlatList,
+  Image,
 } from "react-native";
 import PodcastListItem from "../../components/PodcastListItem";
 import api from "../../services/api";
@@ -16,11 +18,13 @@ import NotFoundIMage from "../../assets/audience.svg";
 import Global from "../../config/Global";
 
 import * as SQLite from "expo-sqlite";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const db = SQLite.openDatabase("podcastDb.db");
 
-function Main({ navigation }) {
+function Main({ navigation, props }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [podcasts, setPodcasts] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
 
   async function loadPodcasts() {
     setRefreshing(true);
@@ -28,6 +32,26 @@ function Main({ navigation }) {
     try {
       const podcasts = await api.get("/podcasts");
       setRefreshing(false);
+      let categories = [];
+      const podcastData = podcasts.data;
+      podcastData.map((podcast) => {
+        let findIndex = false;
+
+        categories.map((category, index) => {
+          if (category.name === podcast.category) findIndex = index;
+        });
+
+        if (findIndex === false) {
+          categories.push({
+            name: podcast.category,
+            podcasts: [podcast],
+          });
+        } else {
+          categories[findIndex].podcasts.push(podcast);
+        }
+      });
+
+      setCategories(categories);
       setPodcasts(podcasts.data);
     } catch (error) {
       setRefreshing(false);
@@ -61,28 +85,46 @@ function Main({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#2A2E43" barStyle="light-content" />
-      <Text>Music</Text>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <ScrollView
-        horizontal={true}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         style={styles.gridView}
       >
-        {podcasts.length < 1 && (
-          <View style={styles.notFoundContent}>
-            <Text style={styles.notFoundText}>Nenhum podcast por aqui</Text>
-          </View>
-        )}
-        {podcasts.length > 0 &&
-          podcasts.map((item, index) => (
-            <PodcastListItem
-              key={index + 1}
-              podcast={item}
-              navigation={navigation}
-            />
-          ))}
+        {categories.map((category, key) => {
+          return (
+            <View style={styles.categoryContainer} key={key.toString()}>
+              <Text style={styles.categoryTitle}>{category.name}</Text>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                style={styles.podcastsContainer}
+                horizontal={true}
+                data={category.podcasts}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("PodcastDetails", {
+                          podcast: item,
+                        });
+                      }}
+                      style={styles.podcastContainer}
+                    >
+                      <Image
+                        source={{ uri: item.image }}
+                        style={styles.podcastImage}
+                      />
+                      <Text style={styles.podcastTitle}>{item.name}</Text>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </View>
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,8 +132,8 @@ function Main({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 32 : 0,
-    backgroundColor: "#2A2E43",
+    paddingTop: Platform.OS === "android" ? 0 : 0,
+    backgroundColor: "#fff",
   },
   gridView: {
     flex: 1,
@@ -108,6 +150,34 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     textAlign: "center",
     color: "#FFF",
+  },
+  categoryContainer: {
+    width: "100%",
+    marginTop: 20,
+  },
+  categoryTitle: {
+    marginHorizontal: 10,
+    color: Global.primaryColor,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  podcastsContainer: {
+    flex: 1,
+  },
+  podcastContainer: {
+    width: 130,
+    marginHorizontal: 10,
+    marginVertical: 10,
+  },
+  podcastImage: {
+    borderRadius: 5,
+    width: "100%",
+    height: 120,
+  },
+  podcastTitle: {
+    color: "#333",
+    fontWeight: "bold",
+    marginTop: 10,
   },
 });
 
