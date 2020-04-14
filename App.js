@@ -1,15 +1,17 @@
-import React from 'react';
-import 'react-native-gesture-handler';
-import Router from './src/router';
-import { View, Text, StyleSheet } from 'react-native';
-import Player from './src/components/Player';
+import React from "react";
+import "react-native-gesture-handler";
+import Router from "./src/router";
+import Player from "./src/components/Player";
+import { Provider } from "react-redux";
+import store from "./src/store";
 
-export default function App() {
+function App() {
   return (
-    <>
-    <Router/>
-    <Player />
-    </>
-    );
-  }
-  
+    <Provider store={store}>
+      <Router />
+      <Player />
+    </Provider>
+  );
+}
+
+export default App;

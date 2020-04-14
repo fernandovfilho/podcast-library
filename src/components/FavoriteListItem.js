@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Image, View, Text, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function PodcastListItem(props) {
+export default function FavoriteListItem(props) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -19,6 +19,9 @@ export default function PodcastListItem(props) {
       <View style={styles.podcastInfo}>
         <Text style={styles.podcastName}>{props.podcast.name}</Text>
         <Text style={styles.podcastAuthor}>{props.podcast.author}</Text>
+        <Text style={styles.podcastDescription}>
+          {props.podcast.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -27,11 +30,17 @@ export default function PodcastListItem(props) {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 7,
+    marginRight: 10,
+    backgroundColor: "#454F63",
+    borderRadius: 12,
+    flexDirection: "row",
+    marginLeft: Platform.OS === "ios" ? 50 : 10,
   },
   podcastImage: {
-    width: "48%",
-    aspectRatio: 1,
+    width: Platform.OS === "ios" ? 110 : 130,
+    height: Platform.OS === "ios" ? 110 : 130,
     borderRadius: 12,
+    marginLeft: Platform.OS === "ios" ? -40 : 0,
     backgroundColor: "white",
     marginTop: Platform.OS === "ios" ? 10 : 0,
   },
@@ -45,6 +54,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#FFF",
+  },
+  podcastDescription: {
+    flexWrap: "wrap",
+    color: "#959DAD",
+    flexShrink: 1,
+    fontSize: 12,
+    marginTop: 5,
   },
   podcastAuthor: {
     marginTop: 5,

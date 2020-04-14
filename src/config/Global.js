@@ -1,3 +1,3 @@
 export default {
-    playerHeight: 75
-}
+  playerHeight: 75,
+};
