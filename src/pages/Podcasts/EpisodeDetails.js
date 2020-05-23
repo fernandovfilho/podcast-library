@@ -12,7 +12,6 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
-import store from "../../store";
 import appActions from "../../appActions";
 
 function EpisodeDetails(props) {
