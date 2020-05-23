@@ -1,20 +1,28 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Platform,
-  StatusBar,
-  ScrollView,
-  RefreshControl,
-} from "react-native";
+import * as SQLite from "expo-sqlite";
+import React, { useEffect, useState } from "react";
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import FavoriteListItem from "../../components/FavoriteListItem";
 
-import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("podcastDb.db");
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? 0 : 0,
+    backgroundColor: "#fff",
+  },
+  list: {
+    flex: 1,
+    marginTop: 10,
+  },
+  img: {
+    width: 50,
+  },
+});
 
 function Favorites({ navigation }) {
   const [podcasts, setPodcasts] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
@@ -30,38 +38,19 @@ function Favorites({ navigation }) {
     });
   }
 
-  const onRefresh = useCallback(() => {
-    _searchTable();
-  }, [refreshing]);
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        style={styles.gridView}
-      >
-        {podcasts.length > 0 &&
-          podcasts.map((item, index) => (
-            <FavoriteListItem
-              key={index + 1}
-              podcast={item}
-              navigation={navigation}
-            />
-          ))}
-      </ScrollView>
+      <FlatList
+        data={podcasts}
+        style={styles.list}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return <FavoriteListItem podcast={item} navigation={navigation} />;
+        }}
+      />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Platform.OS === "android" ? 0 : 0,
-    backgroundColor: "#fff",
-  },
-});
 
 export default Favorites;

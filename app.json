@@ -17,6 +17,10 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.cometdev.podlib",
+      "versionCode": 1
+    },
     "ios": {
       "supportsTablet": true
     },

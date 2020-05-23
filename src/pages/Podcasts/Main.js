@@ -1,24 +1,21 @@
+import * as SQLite from "expo-sqlite";
 import React, { useCallback, useEffect } from "react";
 import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Platform,
-  RefreshControl,
-  ScrollView,
-  View,
-  Text,
   FlatList,
   Image,
+  Platform,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import PodcastListItem from "../../components/PodcastListItem";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Global from "../../config/Global";
 import api from "../../services/api";
 
-import NotFoundIMage from "../../assets/audience.svg";
-import Global from "../../config/Global";
-
-import * as SQLite from "expo-sqlite";
-import { TouchableOpacity } from "react-native-gesture-handler";
 const db = SQLite.openDatabase("podcastDb.db");
 
 function Main({ navigation, props }) {
@@ -106,6 +103,7 @@ function Main({ navigation, props }) {
                 renderItem={({ item }) => {
                   return (
                     <TouchableOpacity
+                      activeOpacity={0.9}
                       onPress={() => {
                         navigation.navigate("PodcastDetails", {
                           podcast: item,

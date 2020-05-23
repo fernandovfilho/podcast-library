@@ -1,25 +1,21 @@
-import React, { useEffect, useCallback } from "react";
+import stripTags from "@ramumb/strip-tags";
+import * as SQLite from "expo-sqlite";
+import React, { useCallback, useEffect } from "react";
 import {
-  StatusBar,
-  SafeAreaView,
-  StyleSheet,
-  Platform,
   Image,
-  Text,
   RefreshControl,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
   TouchableOpacity,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/FontAwesome";
 import * as rssParser from "react-native-rss-parser";
-import stripTags from "@ramumb/strip-tags";
-
+import Icon from "react-native-vector-icons/FontAwesome";
 import EpisodeListItem from "../../components/EpisodeListItem";
-
-import api from "../../services/api";
 import Global from "../../config/Global";
 
-import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("podcastDb.db");
 
 function PodcastDetails(props) {

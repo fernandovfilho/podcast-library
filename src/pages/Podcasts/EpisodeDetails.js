@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  StatusBar,
-  SafeAreaView,
-  StyleSheet,
+  ActivityIndicator,
   Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
-  AsyncStorage,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { connect } from "react-redux";
-import appActions from "../../appActions";
+import Global from "../../config/Global";
+import CurrentEpisodeContext from "../../contexts/CurrentEpisodeContext";
 
 function EpisodeDetails(props) {
   const [isLoading, setLoading] = useState(false);
   const [episode, setEpisode] = useState({});
   const [podcast, setPodcast] = useState({});
+
+  const { loadEpisode } = useContext(CurrentEpisodeContext);
 
   useEffect(() => {
     const podcast = props.route.params.podcast;
@@ -30,8 +31,9 @@ function EpisodeDetails(props) {
   }, []);
 
   function _playSound() {
-    props.dispatch(appActions.setEpisode(episode));
     setLoading(true);
+
+    loadEpisode(episode);
 
     setTimeout(() => {
       setLoading(false);
@@ -41,7 +43,10 @@ function EpisodeDetails(props) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <StatusBar backgroundColor="purple" barStyle="light-content" />
+        <StatusBar
+          backgroundColor={Global.primaryColor}
+          barStyle="light-content"
+        />
         <Image
           style={styles.podcastImage}
           source={{ uri: episode.image ? episode.image : podcast.image }}
@@ -74,8 +79,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   podcastDescription: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginVertical: 20,
+    textAlign: "justify",
   },
   podcastEpisodes: {
     marginHorizontal: 10,
@@ -86,7 +92,7 @@ const styles = StyleSheet.create({
   },
   controlForm: {
     marginTop: -40,
-    backgroundColor: "#665EFF",
+    backgroundColor: Global.primaryColor,
     width: 60,
     height: 60,
     justifyContent: "center",
@@ -107,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((store) => ({ episode: store.episode }))(EpisodeDetails);
+export default EpisodeDetails;

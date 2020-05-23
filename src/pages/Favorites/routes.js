@@ -1,8 +1,7 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-
-import PodcastDetails from "../Podcasts/PodcastDetails";
+import React from "react";
 import EpisodeDetails from "../Podcasts/EpisodeDetails";
+import PodcastDetails from "../Podcasts/PodcastDetails";
 import FavoritesList from "./FavoritesList";
 
 const Stack = createStackNavigator();

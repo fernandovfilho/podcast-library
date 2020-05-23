@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image, View, Text, Platform } from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function PodcastListItem(props) {

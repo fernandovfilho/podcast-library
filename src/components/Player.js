@@ -1,16 +1,16 @@
-import React, { useState, useEffect, Component } from "react";
+import { Audio } from "expo-av";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
-  Slider,
   ActivityIndicator,
+  Slider,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Global from "../config/Global";
-import { Audio } from "expo-av";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { connect } from "react-redux";
+import CurrentEpisodeContext from "../contexts/CurrentEpisodeContext";
 import Utils from "../utils";
 
 function Player(props) {
@@ -20,6 +20,7 @@ function Player(props) {
   const [positionMillis, setPositionMillis] = useState(0);
   const [durationMillis, setDurationMillis] = useState(0);
   const [sound, setSound] = useState(new Audio.Sound());
+  const { episode } = useContext(CurrentEpisodeContext);
 
   useEffect(() => {
     const setupAudio = () => {
@@ -53,8 +54,6 @@ function Player(props) {
 
   useEffect(() => {
     async function loadAudio() {
-      const { episode } = props;
-
       if (episode.audio_url) {
         try {
           await sound.stopAsync();
@@ -70,7 +69,7 @@ function Player(props) {
     }
 
     loadAudio();
-  }, [props.episode]);
+  }, [episode]);
 
   async function _setNewPosition(position) {
     try {
@@ -99,9 +98,7 @@ function Player(props) {
       <View style={styles.containerPlayer}>
         <View style={styles.episodeTitleContainer}>
           <Text style={styles.episodeTitle}>
-            {props.episode.title
-              ? props.episode.title
-              : "Nenhum episódio escolhido"}
+            {episode.title ? episode.title : "Nenhum episódio escolhido"}
           </Text>
         </View>
         <View style={styles.controlsContainer}>
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 50,
     height: Global.playerHeight,
-    backgroundColor: "#665EFF",
+    backgroundColor: Global.primaryColor,
     elevation: 2,
   },
   episodeTitleContainer: {},
@@ -194,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((store) => ({ episode: store.episode }))(Player);
+export default Player;

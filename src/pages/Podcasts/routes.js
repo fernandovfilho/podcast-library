@@ -1,10 +1,8 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
-import PodcastDetails from "./PodcastDetails";
+import React from "react";
 import EpisodeDetails from "./EpisodeDetails";
 import Main from "./Main";
+import PodcastDetails from "./PodcastDetails";
 
 const Stack = createStackNavigator();
 

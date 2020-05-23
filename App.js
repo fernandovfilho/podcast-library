@@ -1,16 +1,15 @@
 import React from "react";
 import "react-native-gesture-handler";
-import Router from "./src/router";
 import Player from "./src/components/Player";
-import { Provider } from "react-redux";
-import store from "./src/store";
+import { CurrentEpisodeProvider } from "./src/contexts/CurrentEpisodeContext";
+import Router from "./src/router";
 
 function App() {
   return (
-    <Provider store={store}>
+    <CurrentEpisodeProvider>
       <Router />
       <Player />
-    </Provider>
+    </CurrentEpisodeProvider>
   );
 }
 

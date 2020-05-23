@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Image, View, Text, Platform } from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function FavoriteListItem(props) {
   return (
     <TouchableOpacity
-      activeOpacity={0.7}
+      activeOpacity={0.9}
       onPress={() => {
         props.navigation.navigate("PodcastDetails", { podcast: props.podcast });
       }}

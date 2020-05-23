@@ -1,10 +1,9 @@
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-
-import PodcastRoutes from "./pages/Podcasts/routes";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import * as React from "react";
 import FavoritesRoutes from "./pages/Favorites/routes";
+import PodcastRoutes from "./pages/Podcasts/routes";
 
 const Tab = createBottomTabNavigator();
 
